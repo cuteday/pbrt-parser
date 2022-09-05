@@ -38,11 +38,14 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 option(pbrtParser_ENABLE_UNITTESTS "Build unit tests" OFF)
+option(pbrtParser_BUILD_APPS "Build helper applications" OFF)
 
 #set(pbrtParser_VERSION "${pbrtParser_VERSION_MAJOR}.${pbrtParser_VERSION_MINOR}.${pbrtParser_VERSION_PATCH}")
 
 add_subdirectory(pbrtParser)
+if(pbrtParser_BUILD_APPS)
 add_subdirectory(apps)
+endif()
 if(pbrtParser_ENABLE_UNITTESTS)
     add_subdirectory(test/unittests)
 endif()
