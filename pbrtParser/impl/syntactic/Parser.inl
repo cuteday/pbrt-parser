@@ -518,6 +518,7 @@ namespace pbrt {
             throw std::runtime_error("named medium has a type, but not a string!?");
           assert(asString->getSize() == 1);
           medium->type = asString->get(0); //paramVec[0];
+          medium->name = name;
           continue;
         }
 

@@ -47,6 +47,7 @@ set(SOURCES
   impl/semantic/Integrator.cpp
   impl/semantic/Sampler.cpp
   impl/semantic/PixelFilter.cpp
+  impl/semantic/Medium.cpp
   )
 
 # ------------------------------------------------------------------

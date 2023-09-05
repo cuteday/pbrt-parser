@@ -391,6 +391,7 @@ namespace pbrt {
       /*! pretty-print this medium (for debugging) */
       std::string toString() const;
 
+      std::string name;
       /*! the 'type' of the medium */
       std::string type;
     };

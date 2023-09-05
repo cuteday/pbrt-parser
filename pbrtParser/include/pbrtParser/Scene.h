@@ -732,6 +732,51 @@ namespace pbrt {
     Texture::SP map_bump;
   };
 
+  struct Medium : public Entity {
+	typedef std::shared_ptr<Medium> SP;
+
+	enum class Type {
+		homogeneous,
+	};
+
+    Medium(const std::string &name = "") : name(name) {}
+
+	Type type = Type::homogeneous;
+	std::string name;
+
+	std::string toString() const override { return "Medium"; }
+	int writeTo(BinaryWriter &) override { return 0; }
+	void readFrom(BinaryReader &) override {}
+  };
+
+  struct MediumInterface : public Entity {
+	typedef std::shared_ptr<MediumInterface> SP;
+
+	Medium::SP inside;
+	Medium::SP outside;
+
+	std::string toString() const override { return "MediumInterface"; }
+	int writeTo(BinaryWriter &) override { return 0; }
+	void readFrom(BinaryReader &) override {}
+  };
+
+  struct HomogeneousMedium : public Medium {
+	typedef std::shared_ptr<HomogeneousMedium> SP;
+
+    HomogeneousMedium(const std::string &name = "") 
+        : Medium(name) { type = Type::homogeneous; }
+
+	vec3f sigma_a = vec3f(0.f);
+	Spectrum spec_sigma_a;
+	vec3f sigma_s = vec3f(0.f);
+	Spectrum spec_sigma_s;
+	vec3f Le = vec3f(0.f);
+	Spectrum spec_Le;
+
+	float g			 = 0;
+	float LeScale	 = 1;
+	float sigmaScale = 1;
+  };
 
   /*! base abstraction for any geometric shape. for pbrt, this
     should actually be called a 'Shape'; we call it shape for
@@ -777,6 +822,8 @@ namespace pbrt {
         because this is easier to use for the end user, and arguably
         more than one doesn' tmake sense, nayway!? */
     AreaLight::SP                     areaLight;
+
+    MediumInterface::SP               mediumInterface;
   };
 
   /*! a plain triangle mesh, with vec3f vertex and normal arrays, and

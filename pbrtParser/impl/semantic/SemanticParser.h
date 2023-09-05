@@ -182,8 +182,16 @@ namespace pbrt {
     Shape::SP emitTriangleMesh(pbrt::syntactic::Shape::SP shape);
     /*! @} */
 
+    // ==================================================================
+	  // Materials
+	  // ==================================================================
+    std::map<pbrt::syntactic::Medium::SP, Medium::SP> mediumMapping;
 
-    
+    Medium::SP createMedium_homogeneous(pbrt::syntactic::Medium::SP in);
+    Medium::SP createMediumFrom(pbrt::syntactic::Medium::SP in);
+    Medium::SP findOrCreateMedium(pbrt::syntactic::Medium::SP in);
+	void extractMediumInterface(Shape::SP geom, pbrt::syntactic::Shape shape);
+
     // ==================================================================
     // General helper stuff
     // ==================================================================
