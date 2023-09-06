@@ -2,14 +2,20 @@
 
 namespace pbrt {
 
-void SemanticParser::extractMediumInterface(Shape::SP geom, pbrt::syntactic::Shape shape) {
-	if (!shape.attributes->mediumInterface.first.empty()) {
-		geom->mediumInterface->inside = findOrCreateMedium(
-			shape.attributes->findNamedMedium(shape.attributes->mediumInterface.first));
+void SemanticParser::extractMediumInterface(Shape::SP geom, pbrt::syntactic::Shape::SP shape) {
+	Medium::SP inside, outside;
+	if (!shape->attributes->mediumInterface.first.empty()) {
+		inside = findOrCreateMedium(
+			shape->attributes->findNamedMedium(shape->attributes->mediumInterface.first));
 	}
-	if (!shape.attributes->mediumInterface.second.empty()) {
-		geom->mediumInterface->inside = findOrCreateMedium(
-			shape.attributes->findNamedMedium(shape.attributes->mediumInterface.second));
+	if (!shape->attributes->mediumInterface.second.empty()) {
+		outside = findOrCreateMedium(
+			shape->attributes->findNamedMedium(shape->attributes->mediumInterface.second));
+	}
+	if (inside || outside) {
+		geom->mediumInterface = std::make_shared<MediumInterface>();
+		geom->mediumInterface ->inside = inside;
+		geom->mediumInterface->outside = outside;
 	}
 }
 
@@ -25,9 +31,12 @@ Medium::SP SemanticParser::findOrCreateMedium(pbrt::syntactic::Medium::SP in) {
 
 Medium::SP SemanticParser::createMedium_homogeneous(pbrt::syntactic::Medium::SP in) {
 	HomogeneousMedium::SP medium = std::make_shared<HomogeneousMedium>();
+	medium->name				 = in->name;
 	for (auto it : in->param) {
 		std::string name = it.first;
-		if (name == "g")
+		if (name == "type")
+			continue;
+		else if (name == "g")
 			medium->g = in->getParam1f(name, 0);
 		else if (name == "scale")
 			medium->sigmaScale = in->getParam1f(name, 1);
@@ -52,7 +61,8 @@ Medium::SP SemanticParser::createMedium_homogeneous(pbrt::syntactic::Medium::SP 
 				in->getParamPairNf(medium->spec_sigma_s.spd.data(), &N, name);
 			}			
 		} else
-			throw std::runtime_error("as-yet-unhandled homogeneous parameter '" + it.first + "'");
+			std::cerr << "as-yet-unhandled homogeneous parameter '" + it.first + "'" << std::endl;
+			//throw std::runtime_error("as-yet-unhandled homogeneous parameter '" + it.first + "'");
 	}
 	return medium;
 }

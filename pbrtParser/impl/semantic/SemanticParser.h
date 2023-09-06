@@ -190,7 +190,7 @@ namespace pbrt {
     Medium::SP createMedium_homogeneous(pbrt::syntactic::Medium::SP in);
     Medium::SP createMediumFrom(pbrt::syntactic::Medium::SP in);
     Medium::SP findOrCreateMedium(pbrt::syntactic::Medium::SP in);
-	void extractMediumInterface(Shape::SP geom, pbrt::syntactic::Shape shape);
+	void extractMediumInterface(Shape::SP geom, pbrt::syntactic::Shape::SP shape);
 
     // ==================================================================
     // General helper stuff

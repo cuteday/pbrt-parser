@@ -231,6 +231,7 @@ namespace pbrt {
       v = xfmNormal(xfm,v);
 
     extractTextures(ours,shape);
+	extractMediumInterface(ours, shape);
     return ours;
   }
 
@@ -253,6 +254,7 @@ namespace pbrt {
     for (vec3f &v : ours->normal)
       v = xfmNormal(xfm,v);
     extractTextures(ours,shape);
+	extractMediumInterface(ours, shape);
     
     auto alphaParam = shape->findParam<float>("alpha");
     if (alphaParam) 
@@ -324,6 +326,7 @@ namespace pbrt {
     ours->transform = shape->transform.atStart;
     ours->radius    = shape->getParam1f("radius");
     extractTextures(ours,shape);
+	extractMediumInterface(ours, shape);
       
     return ours;
   }
@@ -340,6 +343,7 @@ namespace pbrt {
       ours->height    = shape->getParam1f("height");
         
     extractTextures(ours,shape);
+	extractMediumInterface(ours, shape);
       
     return ours;
   }
